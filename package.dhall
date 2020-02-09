@@ -4,4 +4,7 @@
 , InParams =
       ./InParams/package.dhall sha256:9962144a2e3830b1285ce5248d87aa1acc370c03ed454e79581e6e183f4b70ed
     ? ./InParams/package.dhall
+, OutParams =
+      ./OutParams/package.dhall sha256:12b9716a472b86bf00bce6bfc66244f63c5e5f58b980870c4d4157105dbd77af
+    ? ./OutParams/package.dhall
 }

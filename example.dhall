@@ -26,4 +26,79 @@ let get =
               DockerImage.InParams::{ save = Some True }
         }
 
-in  get
+let buildParams =
+      DockerImage.OutParams::{
+      , image_from =
+          DockerImage.OutParams.ImageFrom.Type.Build
+            DockerImage.OutParams.ImageFrom.Build::{
+            , build = "some-repo/build-path"
+            , dockerfile = Some "some-repo/build-path/Dockerfile.test"
+            }
+      }
+
+let putBuild =
+      Concourse.helpers.putStep
+        Concourse.schemas.PutStep::{
+        , resource = resource
+        , params = DockerImage.OutParams.render buildParams
+        }
+
+let putImport =
+      Concourse.helpers.putStep
+        Concourse.schemas.PutStep::{
+        , resource = resource
+        , params =
+            DockerImage.OutParams.render
+             DockerImage.OutParams::{
+              , image_from =
+                  DockerImage.OutParams.ImageFrom.Type.ImportFile "path/to/file"
+              }
+        }
+
+let putLoad =
+      Concourse.helpers.putStep
+        Concourse.schemas.PutStep::{
+        , resource = resource
+        , params =
+            DockerImage.OutParams.render
+              DockerImage.OutParams::{
+              , image_from =
+                  DockerImage.OutParams.ImageFrom.Type.Load "path/to/dir"
+              }
+        }
+
+let putLoadFile =
+      Concourse.helpers.putStep
+        Concourse.schemas.PutStep::{
+        , resource = resource
+        , params =
+            DockerImage.OutParams.render
+              DockerImage.OutParams::{
+              , image_from =
+                  DockerImage.OutParams.ImageFrom.Type.LoadFile
+                    { load_file = "path/to/file"
+                    , load_repository = "example.com/docker/repo"
+                    , load_tag = Some "tag"
+                    }
+              }
+        }
+
+let putPullRepo =
+      Concourse.helpers.putStep
+        Concourse.schemas.PutStep::{
+        , resource = resource
+        , params =
+            DockerImage.OutParams.render
+              DockerImage.OutParams::{
+              , image_from =
+                  DockerImage.OutParams.ImageFrom.Type.PullRepository
+                    { repository = "example.com/docker/repo"
+                    , pull_tag = Some "tag"
+                    }
+              }
+        }
+
+in  Concourse.schemas.Job::{
+    , name = "example"
+    , plan = [ get, putBuild, putImport, putLoad, putLoadFile, putPullRepo ]
+    }
