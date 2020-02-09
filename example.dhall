@@ -17,4 +17,13 @@ let resource =
             DockerImage.Source::{ repository = "ubuntu" }
       }
 
-in  resource
+let get =
+      Concourse.helpers.getStep
+        Concourse.schemas.GetStep::{
+        , resource = resource
+        , params =
+            DockerImage.InParams.render
+              DockerImage.InParams::{ save = Some True }
+        }
+
+in  get
