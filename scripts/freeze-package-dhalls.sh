@@ -15,6 +15,7 @@ package_files=(Source/package.dhall
                OutParams/LoadFile/package.dhall
                OutParams/PullRepository/package.dhall
                OutParams/package.dhall
+               ImageResource/package.dhall
                package.dhall
               )
 

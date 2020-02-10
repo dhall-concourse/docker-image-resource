@@ -7,4 +7,7 @@
 , OutParams =
       ./OutParams/package.dhall sha256:12b9716a472b86bf00bce6bfc66244f63c5e5f58b980870c4d4157105dbd77af
     ? ./OutParams/package.dhall
+, ImageResource =
+      ./ImageResource/package.dhall sha256:f24918556b497372a3cd1510d0160ba013f3e22e47c5bba840335fa51c596e9b
+    ? ./ImageResource/package.dhall
 }

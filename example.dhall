@@ -49,7 +49,7 @@ let putImport =
         , resource = resource
         , params =
             DockerImage.OutParams.render
-             DockerImage.OutParams::{
+              DockerImage.OutParams::{
               , image_from =
                   DockerImage.OutParams.ImageFrom.Type.ImportFile "path/to/file"
               }
@@ -98,7 +98,24 @@ let putPullRepo =
               }
         }
 
+let task =
+      Concourse.helpers.taskStep
+        Concourse.schemas.TaskStep::{
+        , task = "test-image-resource"
+        , config =
+            Concourse.Types.TaskSpec.Config
+              Concourse.schemas.TaskConfig::{
+              , image_resource =
+                  DockerImage.ImageResource.render
+                    DockerImage.ImageResource::{
+                    , source = DockerImage.Source::{ repository = "ubuntu" }
+                    }
+              , run = Concourse.schemas.TaskRunConfig::{ path = "true" }
+              }
+        }
+
 in  Concourse.schemas.Job::{
     , name = "example"
-    , plan = [ get, putBuild, putImport, putLoad, putLoadFile, putPullRepo ]
+    , plan =
+      [ get, putBuild, putImport, putLoad, putLoadFile, putPullRepo, task ]
     }
