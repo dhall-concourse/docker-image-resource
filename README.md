@@ -144,7 +144,7 @@ in putLoad
 
 Build requires a record with type described [here](OutParams/LoadFile/Type.dhall).
 
-```
+```dhall
 let Concourse =
         ./deps/concourse.dhall
       ? https://raw.githubusercontent.com/akshaymankar/dhall-concourse/master/package.dhall
@@ -178,7 +178,7 @@ in putLoadFile
 
 ImportFile requires just one text argument, it specifies the path to a file to `docker import` and push.
 
-```
+```dhall
 let Concourse =
         ./deps/concourse.dhall
       ? https://raw.githubusercontent.com/akshaymankar/dhall-concourse/master/package.dhall
@@ -208,7 +208,7 @@ in putImport
 
 PullRepository requires a record with `repository` (corresponds to `pull_repository` in docker-image resource docs) which is a `Text` field containing the name of repository to push. It also contains and optional `pull_tag` field, which specified what tag to pull, it defaults to `latest`.
 
-```
+```dhall
 let Concourse =
         ./deps/concourse.dhall
       ? https://raw.githubusercontent.com/akshaymankar/dhall-concourse/master/package.dhall
@@ -235,4 +235,37 @@ let putPullRepo =
         }
 
 in putPullRepo
+```
+
+### ImageResource
+
+The docker-image is the most commonly used resource in defining tasks. Here is how one can use it:
+
+```dhall
+let Concourse =
+        ./deps/concourse.dhall
+      ? https://raw.githubusercontent.com/akshaymankar/dhall-concourse/master/package.dhall
+
+let DockerImage =
+        ./package.dhall
+      ? https://raw.githubusercontent.com/dhall-concourse/git-resource/master/package.dhall
+
+let imageSource =
+      DockerImage.ImageResource::{
+      , source = DockerImage.Source::{ repository = "ubuntu" }
+      }
+
+let task =
+      Concourse.helpers.taskStep
+        Concourse.schemas.TaskStep::{
+        , task = "test-image-resource"
+        , config =
+            Concourse.Types.TaskSpec.Config
+              Concourse.schemas.TaskConfig::{
+              , image_resource = DockerImage.ImageResource.render imageSource
+              , run = Concourse.schemas.TaskRunConfig::{ path = "true" }
+              }
+        }
+
+in  task
 ```
