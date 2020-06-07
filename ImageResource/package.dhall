@@ -5,6 +5,6 @@
       ./default.dhall sha256:83dc9bed8b774dd9bbeea182785be505fbcd3b52fcbfd3f50f71f8b616868c05
     ? ./default.dhall
 , render =
-      ./render.dhall sha256:8f7b0516066a88906c3c596e03ecce2520b57cc1b6a23f1490cc74e2cd3dc1b5
+      ./render.dhall sha256:b6c918bb0194859529d988cb704e094d0b5f68bd42ee4eb226167fb3ee9bc6c8
     ? ./render.dhall
 }
